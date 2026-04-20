@@ -1,0 +1,13 @@
+{
+  "name": "rollblox",
+  "tree": {
+    "$className": "DataModel",
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "main": {
+          "$path": "src/main.client.lua"
+        }
+      }
+    }
+  }
+}
