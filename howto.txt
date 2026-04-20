@@ -1,0 +1,12 @@
+when i want to let Codex get the latest by way of GitHub and also update GitHub, i do these three statements:
+
+git add .
+git commit -m "<describe>"
+git push
+
+when i want to put a diff down locally and to rojo i do:
+
+git apply patch.diff
+
+when i want to update Chad's source i need to update the source by hand
+
