@@ -1,0 +1,47 @@
+﻿diff --git a/src/StarterPlayerScripts/poses.lua b/src/StarterPlayerScripts/poses.lua
+index bbcba77..7f0ec39 100644
+--- a/src/StarterPlayerScripts/poses.lua
++++ b/src/StarterPlayerScripts/poses.lua
+@@ -124,26 +124,26 @@ local function createSimpleFighter(modelName, color)
+ local model = Instance.new("Model")
+ model.Name = modelName
+ model.Parent = workspace
+-local torso = createBodyPart(model, "Torso", Vector3.new(1.9, 3.2, 1.25), color)
+-local hips = createBodyPart(model, "Hips", Vector3.new(1.7, 0.9, 1.25), color:Lerp(Color3.fromRGB(30, 30, 30), 0.1))
+-local shoulders = createBodyPart(model, "Shoulders", Vector3.new(2.3, 0.6, 1.2), color:Lerp(Color3.fromRGB(235, 235, 235), 0.18))
+-local chestPlate = createBodyPart(model, "ChestPlate", Vector3.new(1.55, 0.9, 0.18), Color3.fromRGB(230, 230, 235))
+-local head = createBodyPart(model, "Head", Vector3.new(1.6, 1.6, 1.6), Color3.fromRGB(255, 226, 197))
++local torso = createBodyPart(model, "Torso", Vector3.new(1.2, 3.2, 0.9), color)
++local hips = createBodyPart(model, "Hips", Vector3.new(1.1, 0.75, 0.9), color:Lerp(Color3.fromRGB(30, 30, 30), 0.1))
++local shoulders = createBodyPart(model, "Shoulders", Vector3.new(1.5, 0.5, 0.9), color:Lerp(Color3.fromRGB(235, 235, 235), 0.18))
++local chestPlate = createBodyPart(model, "ChestPlate", Vector3.new(0.98, 0.9, 0.13), Color3.fromRGB(230, 230, 235))
++local head = createBodyPart(model, "Head", Vector3.new(1.3, 1.3, 1.3), Color3.fromRGB(255, 226, 197))
+ local faceColor = Color3.fromRGB(18, 18, 18)
+ local leftEye = createBodyPart(model, "LeftEye", Vector3.new(0.14, 0.14, 0.05), faceColor)
+ local rightEye = createBodyPart(model, "RightEye", Vector3.new(0.14, 0.14, 0.05), faceColor)
+ local mouth = createBodyPart(model, "Mouth", Vector3.new(0.34, 0.07, 0.05), faceColor)
+-local leftArm = createBodyPart(model, "LeftArm", Vector3.new(0.62, 2.9, 0.62), color)
+-local rightArm = createBodyPart(model, "RightArm", Vector3.new(0.62, 2.9, 0.62), color)
+-local leftForearm = createBodyPart(model, "LeftForearm", Vector3.new(0.52, 1.85, 0.52), color:Lerp(Color3.fromRGB(15, 15, 15), 0.12))
+-local rightForearm = createBodyPart(model, "RightForearm", Vector3.new(0.52, 1.85, 0.52), color:Lerp(Color3.fromRGB(15, 15, 15), 0.12))
+-local leftLeg = createBodyPart(model, "LeftLeg", Vector3.new(0.72, 3.2, 0.72), color)
+-local rightLeg = createBodyPart(model, "RightLeg", Vector3.new(0.72, 3.2, 0.72), color)
+-local leftShin = createBodyPart(model, "LeftShin", Vector3.new(0.6, 1.95, 0.6), color:Lerp(Color3.fromRGB(12, 12, 12), 0.08))
+-local rightShin = createBodyPart(model, "RightShin", Vector3.new(0.6, 1.95, 0.6), color:Lerp(Color3.fromRGB(12, 12, 12), 0.08))
+-local belt = createBodyPart(model, "Belt", Vector3.new(2.0, 0.3, 1.35), Color3.fromRGB(24, 24, 24))
+-local topMarker = createBodyPart(model, "TopMarker", Vector3.new(2.05, 0.14, 1.42), Color3.fromRGB(250, 195, 60))
+-local bottomMarker = createBodyPart(model, "BottomMarker", Vector3.new(2.15, 0.1, 1.5), Color3.fromRGB(100, 220, 255))
++local leftArm = createBodyPart(model, "LeftArm", Vector3.new(0.38, 2.9, 0.38), color)
++local rightArm = createBodyPart(model, "RightArm", Vector3.new(0.38, 2.9, 0.38), color)
++local leftForearm = createBodyPart(model, "LeftForearm", Vector3.new(0.32, 1.85, 0.32), color:Lerp(Color3.fromRGB(15, 15, 15), 0.12))
++local rightForearm = createBodyPart(model, "RightForearm", Vector3.new(0.32, 1.85, 0.32), color:Lerp(Color3.fromRGB(15, 15, 15), 0.12))
++local leftLeg = createBodyPart(model, "LeftLeg", Vector3.new(0.42, 3.2, 0.42), color)
++local rightLeg = createBodyPart(model, "RightLeg", Vector3.new(0.42, 3.2, 0.42), color)
++local leftShin = createBodyPart(model, "LeftShin", Vector3.new(0.32, 1.95, 0.32), color:Lerp(Color3.fromRGB(12, 12, 12), 0.08))
++local rightShin = createBodyPart(model, "RightShin", Vector3.new(0.32, 1.95, 0.32), color:Lerp(Color3.fromRGB(12, 12, 12), 0.08))
++local belt = createBodyPart(model, "Belt", Vector3.new(1.26, 0.3, 0.97), Color3.fromRGB(24, 24, 24))
++local topMarker = createBodyPart(model, "TopMarker", Vector3.new(1.29, 0.14, 1.02), Color3.fromRGB(250, 195, 60))
++local bottomMarker = createBodyPart(model, "BottomMarker", Vector3.new(1.36, 0.1, 1.08), Color3.fromRGB(100, 220, 255))
+ createRoleBadge(head)
+ return { model = model, torso = torso, hips = hips, shoulders = shoulders, head = head, leftEye = leftEye, rightEye = rightEye, mouth = mouth, leftArm = leftArm, rightArm = rightArm, leftForearm = leftForearm, rightForearm = rightForearm, leftLeg = leftLeg, rightLeg = rightLeg, leftShin = leftShin, rightShin = rightShin, belt = belt, chestPlate = chestPlate, topMarker = topMarker, bottomMarker = bottomMarker, baseColor = color }
+ end
