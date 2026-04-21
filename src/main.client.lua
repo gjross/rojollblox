@@ -1,4 +1,4 @@
---420 859
+﻿--420 942
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 
@@ -1248,28 +1248,74 @@ local function poseClosedGuardTop(fighter, rootPos, controlPressure, postureResi
 end
 
 local function poseSideControlBottom(fighter, rootPos)
+	-- Side-control bottom root is rolled to keep the fighter on their side.
 	local root = CFrame.new(rootPos + Vector3.new(0, 0.15, 0)) * CFrame.Angles(0, 0, math.rad(90))
-	local torsoCf = root * CFrame.new(0, 1.4, 0)
+	local torsoCf = root
+		* CFrame.new(0, 1.4, 0)
+		* CFrame.Angles(math.rad(8), 0, math.rad(6))
+
+	local headCf = torsoCf
+		* CFrame.new(0, 0.95, -1.15)
+		* CFrame.Angles(math.rad(-10), math.rad(-8), 0)
+
+	local leftArmCf = torsoCf
+		* CFrame.new(-1.45, 0.05, -0.25)
+		* CFrame.Angles(math.rad(-28), math.rad(10), math.rad(72))
+
+	local rightArmCf = torsoCf
+		* CFrame.new(1.35, -0.2, -0.45)
+		* CFrame.Angles(math.rad(10), math.rad(-8), math.rad(82))
+
+	local leftLegCf = torsoCf
+		* CFrame.new(-0.8, -0.95, 1.55)
+		* CFrame.Angles(math.rad(18), math.rad(-10), math.rad(6))
+
+	local rightLegCf = torsoCf
+		* CFrame.new(0.75, -1.0, 1.5)
+		* CFrame.Angles(math.rad(6), math.rad(8), math.rad(-8))
+
 	setPartCFrame(fighter.torso, torsoCf)
-	setPartCFrame(fighter.head, torsoCf * CFrame.new(0, 0.2, -2.35))
-	setPartCFrame(fighter.leftArm, CFrame.new(rootPos + Vector3.new(-2.0, 1.6, -0.25)) * CFrame.Angles(math.rad(-20), 0, math.rad(90)))
-	setPartCFrame(fighter.rightArm, CFrame.new(rootPos + Vector3.new(2.0, 1.2, -0.45)) * CFrame.Angles(math.rad(8), 0, math.rad(90)))
-	setPartCFrame(fighter.leftLeg, CFrame.new(rootPos + Vector3.new(-0.9, 1.2, 2.05)) * CFrame.Angles(math.rad(12), 0, 0))
-	setPartCFrame(fighter.rightLeg, CFrame.new(rootPos + Vector3.new(0.9, 1.2, 2.05)) * CFrame.Angles(math.rad(-8), 0, 0))
+	setPartCFrame(fighter.head, headCf)
+	setPartCFrame(fighter.leftArm, leftArmCf)
+	setPartCFrame(fighter.rightArm, rightArmCf)
+	setPartCFrame(fighter.leftLeg, leftLegCf)
+	setPartCFrame(fighter.rightLeg, rightLegCf)
 	placeBelt(fighter)
 end
-
 local function poseSideControlTop(fighter, rootPos)
 	local root = CFrame.new(rootPos + Vector3.new(0, 0.35, 0.15)) * CFrame.Angles(0, math.rad(90), 0)
-	setPartCFrame(fighter.torso, root * CFrame.new(0, 2.9, -0.2) * CFrame.Angles(math.rad(12), 0, 0))
-	setPartCFrame(fighter.head, root * CFrame.new(0, 5.1, -0.7))
-	setPartCFrame(fighter.leftArm, root * CFrame.new(-1.6, 2.55, 0.65) * CFrame.Angles(math.rad(55), 0, math.rad(8)))
-	setPartCFrame(fighter.rightArm, root * CFrame.new(1.65, 2.35, 0.2) * CFrame.Angles(math.rad(25), 0, math.rad(-8)))
-	setPartCFrame(fighter.leftLeg, root * CFrame.new(-0.8, 1.5, 1.7) * CFrame.Angles(math.rad(90), 0, 0))
-	setPartCFrame(fighter.rightLeg, root * CFrame.new(0.8, 1.5, 1.45) * CFrame.Angles(math.rad(90), 0, 0))
+	local torsoCf = root
+		* CFrame.new(0, 2.9, -0.2)
+		* CFrame.Angles(math.rad(12), 0, math.rad(-4))
+
+	local headCf = torsoCf
+		* CFrame.new(0, 1.45, -0.55)
+		* CFrame.Angles(math.rad(4), math.rad(-6), 0)
+
+	local leftArmCf = torsoCf
+		* CFrame.new(-1.6, -0.3, 0.9)
+		* CFrame.Angles(math.rad(58), math.rad(6), math.rad(12))
+
+	local rightArmCf = torsoCf
+		* CFrame.new(1.55, -0.55, 0.35)
+		* CFrame.Angles(math.rad(28), math.rad(-8), math.rad(-10))
+
+	local leftLegCf = torsoCf
+		* CFrame.new(-0.8, -1.45, 1.95)
+		* CFrame.Angles(math.rad(88), 0, math.rad(4))
+
+	local rightLegCf = torsoCf
+		* CFrame.new(0.8, -1.45, 1.65)
+		* CFrame.Angles(math.rad(88), 0, math.rad(-4))
+
+	setPartCFrame(fighter.torso, torsoCf)
+	setPartCFrame(fighter.head, headCf)
+	setPartCFrame(fighter.leftArm, leftArmCf)
+	setPartCFrame(fighter.rightArm, rightArmCf)
+	setPartCFrame(fighter.leftLeg, leftLegCf)
+	setPartCFrame(fighter.rightLeg, rightLegCf)
 	placeBelt(fighter)
 end
-
 local function poseMountBottom(fighter, rootPos, mountPressure, escapeProgress)
 	mountPressure = mountPressure or 0
 	escapeProgress = escapeProgress or 0
@@ -1277,38 +1323,79 @@ local function poseMountBottom(fighter, rootPos, mountPressure, escapeProgress)
 	local turn = escapeProgress * 0.14
 	local hipShift = escapeProgress * 0.24
 
+	-- Mount bottom root is rolled to keep the torso pinned to the mat plane.
 	local root = CFrame.new(rootPos + Vector3.new(0, 0.15, 0)) * CFrame.Angles(0, 0, math.rad(90))
-	local torsoCf = root * CFrame.new(hipShift, 1.45 - flatten, 0) * CFrame.Angles(math.rad(turn * 24), 0, 0)
-	local headLift = 0.72 + flatten * 0.18
-	local headDepth = -1.48 + turn * 0.22
-	local headPitch = math.rad(-12 + flatten * 10)
-	local headYaw = math.rad(-22 + turn * 40)
-	local headRoll = math.rad(-8 + turn * 18)
+	local torsoCf = root
+		* CFrame.new(hipShift, 1.45 - flatten, 0)
+		* CFrame.Angles(math.rad(turn * 24), 0, math.rad(turn * 8))
+
+	local headCf = torsoCf
+		* CFrame.new(-hipShift * 0.08, 0.78 + flatten * 0.1, -1.42 + turn * 0.16)
+		* CFrame.Angles(math.rad(-10 + flatten * 8), math.rad(-20 + turn * 28), math.rad(-8 + turn * 14))
+
+	local leftArmCf = torsoCf
+		* CFrame.new(-1.55 + hipShift * 0.3, -0.1 - flatten * 0.2, -0.05)
+		* CFrame.Angles(math.rad(-6 + turn * 18), math.rad(20), math.rad(88))
+
+	local rightArmCf = torsoCf
+		* CFrame.new(1.55 + hipShift * 0.3, -0.1 - flatten * 0.2, -0.05)
+		* CFrame.Angles(math.rad(6 - turn * 18), math.rad(-20), math.rad(92))
+
+	local leftLegCf = torsoCf
+		* CFrame.new(-0.95 + hipShift * 0.8, -1.15, 1.95)
+		* CFrame.Angles(math.rad(14 + turn * 10), math.rad(-4), math.rad(6))
+
+	local rightLegCf = torsoCf
+		* CFrame.new(0.95 + hipShift * 0.8, -1.15, 1.95)
+		* CFrame.Angles(math.rad(-10 + turn * 10), math.rad(4), math.rad(-6))
 
 	setPartCFrame(fighter.torso, torsoCf)
-	setPartCFrame(fighter.head, torsoCf * CFrame.new(-hipShift * 0.08, headLift, headDepth) * CFrame.Angles(headPitch, headYaw, headRoll))
-	setPartCFrame(fighter.leftArm, CFrame.new(rootPos + Vector3.new(-1.6 + hipShift * 0.5, 1.35 - flatten * 0.25, 0.1)) * CFrame.Angles(math.rad(turn * 18), math.rad(20), math.rad(95)))
-	setPartCFrame(fighter.rightArm, CFrame.new(rootPos + Vector3.new(1.6 + hipShift * 0.5, 1.35 - flatten * 0.25, 0.1)) * CFrame.Angles(math.rad(-turn * 18), math.rad(-20), math.rad(85)))
-	setPartCFrame(fighter.leftLeg, CFrame.new(rootPos + Vector3.new(-0.95 + hipShift, 1.2, 2.1)) * CFrame.Angles(math.rad(12 + turn * 12), 0, 0))
-	setPartCFrame(fighter.rightLeg, CFrame.new(rootPos + Vector3.new(0.95 + hipShift, 1.2, 2.1)) * CFrame.Angles(math.rad(-12 + turn * 12), 0, 0))
+	setPartCFrame(fighter.head, headCf)
+	setPartCFrame(fighter.leftArm, leftArmCf)
+	setPartCFrame(fighter.rightArm, rightArmCf)
+	setPartCFrame(fighter.leftLeg, leftLegCf)
+	setPartCFrame(fighter.rightLeg, rightLegCf)
 	placeBelt(fighter)
 end
-
 local function poseMountTop(fighter, rootPos, mountPressure, escapeProgress)
 	mountPressure = mountPressure or 0
 	escapeProgress = escapeProgress or 0
 	local upright = mountPressure * 0.2
 	local destabilized = escapeProgress * 0.12
 
-	setPartCFrame(fighter.torso, CFrame.new(rootPos + Vector3.new(destabilized * 0.7, 4.1 + upright - (destabilized * 0.5), 0.15)) * CFrame.Angles(math.rad(3 - upright * 10 + (destabilized * 16)), 0, 0))
-	setPartCFrame(fighter.head, CFrame.new(rootPos + Vector3.new(destabilized * 0.55, 6.55 + upright * 0.8 - destabilized * 0.35, 0.05 + upright * 0.3)))
-	setPartCFrame(fighter.leftArm, CFrame.new(rootPos + Vector3.new(-1.6 + destabilized, 3.55 + upright * 0.35, -0.05)) * CFrame.Angles(math.rad(35 - upright * 8 + destabilized * 18), 0, math.rad(10)))
-	setPartCFrame(fighter.rightArm, CFrame.new(rootPos + Vector3.new(1.6 + destabilized, 3.55 + upright * 0.35, -0.05)) * CFrame.Angles(math.rad(35 - upright * 8 + destabilized * 18), 0, math.rad(-10)))
-	setPartCFrame(fighter.leftLeg, CFrame.new(rootPos + Vector3.new(-1.65 + destabilized * 0.9, 1.5, 0.45)) * CFrame.Angles(math.rad(90), 0, math.rad(24 - (escapeProgress * 5))))
-	setPartCFrame(fighter.rightLeg, CFrame.new(rootPos + Vector3.new(1.65 + destabilized * 0.9, 1.5, 0.45)) * CFrame.Angles(math.rad(90), 0, math.rad(-24 + (escapeProgress * 5))))
+	local root = CFrame.new(rootPos)
+	local torsoCf = root
+		* CFrame.new(destabilized * 0.7, 4.1 + upright - (destabilized * 0.5), 0.15)
+		* CFrame.Angles(math.rad(3 - upright * 10 + (destabilized * 16)), 0, math.rad(destabilized * 6))
+
+	local headCf = torsoCf
+		* CFrame.new(0, 1.45 + upright * 0.35, -0.1 + upright * 0.15)
+		* CFrame.Angles(math.rad(2 - upright * 4), math.rad(destabilized * 8), 0)
+
+	local leftArmCf = torsoCf
+		* CFrame.new(-1.6 + destabilized * 0.35, -0.55 + upright * 0.25, -0.2)
+		* CFrame.Angles(math.rad(35 - upright * 8 + destabilized * 18), 0, math.rad(12))
+
+	local rightArmCf = torsoCf
+		* CFrame.new(1.6 + destabilized * 0.35, -0.55 + upright * 0.25, -0.2)
+		* CFrame.Angles(math.rad(35 - upright * 8 + destabilized * 18), 0, math.rad(-12))
+
+	local leftLegCf = torsoCf
+		* CFrame.new(-1.65 + destabilized * 0.45, -2.6, 0.3)
+		* CFrame.Angles(math.rad(90), 0, math.rad(24 - (escapeProgress * 5)))
+
+	local rightLegCf = torsoCf
+		* CFrame.new(1.65 + destabilized * 0.45, -2.6, 0.3)
+		* CFrame.Angles(math.rad(90), 0, math.rad(-24 + (escapeProgress * 5)))
+
+	setPartCFrame(fighter.torso, torsoCf)
+	setPartCFrame(fighter.head, headCf)
+	setPartCFrame(fighter.leftArm, leftArmCf)
+	setPartCFrame(fighter.rightArm, rightArmCf)
+	setPartCFrame(fighter.leftLeg, leftLegCf)
+	setPartCFrame(fighter.rightLeg, rightLegCf)
 	placeBelt(fighter)
 end
-
 local function applyTopBottomPose(positionName, topFighter, bottomFighter)
 	if positionName == "Closed Guard" then
 		local pressureScore = gameState.triangleThreat - gameState.postureLevel
@@ -1392,7 +1479,7 @@ local function styleFighterByRole(fighter, role, isPlayer)
 		else
 			roleBillboard.StudsOffset = Vector3.new(0, 2.2, 0)
 		end
-		roleText.Text = string.upper(identityText .. " • " .. role)
+		roleText.Text = string.upper(identityText .. " â€¢ " .. role)
 		roleText.BackgroundColor3 = isPlayer and Color3.fromRGB(40, 115, 235) or fighter.baseColor:Lerp(targetColor, 0.55)
 		roleText.TextColor3 = Color3.fromRGB(235, 238, 245)
 		roleText.TextStrokeTransparency = isPlayer and 0.15 or 0.55
@@ -1617,15 +1704,15 @@ render = function()
 	end
 
 	if guiRefs.playerActionLabel then
-		guiRefs.playerActionLabel.Text = "You • " .. gameState.playerAction
+		guiRefs.playerActionLabel.Text = "You â€¢ " .. gameState.playerAction
 	end
 
 	if guiRefs.cpuActionLabel then
-		guiRefs.cpuActionLabel.Text = "CPU • " .. gameState.cpuAction
+		guiRefs.cpuActionLabel.Text = "CPU â€¢ " .. gameState.cpuAction
 	end
 
 	if guiRefs.eventLogLabel then
-		guiRefs.eventLogLabel.Text = string.format("E%d • %s", gameState.exchangeCount, gameState.lastOutcome)
+		guiRefs.eventLogLabel.Text = string.format("E%d â€¢ %s", gameState.exchangeCount, gameState.lastOutcome)
 	end
 
 	local inClosedGuard = gameState.position == "Closed Guard"
@@ -1682,7 +1769,7 @@ render = function()
 	if guiRefs.controlHintLabel then
 		if gameState.position == "Mount" and gameState.playerRole == "Bottom" then
 			guiRefs.controlHintLabel.Text = string.format(
-				"Mouse Dir: %s • Aggro: %s • Bridge %.2f • Shrimp %.2f • %s",
+				"Mouse Dir: %s â€¢ Aggro: %s â€¢ Bridge %.2f â€¢ Shrimp %.2f â€¢ %s",
 				gameState.mouseDirectionBucket,
 				gameState.aggressionTier,
 				gameState.bridgePressure,
@@ -1691,7 +1778,7 @@ render = function()
 			)
 		else
 			guiRefs.controlHintLabel.Text = string.format(
-				"Mouse Dir: %s • Aggro: %s • %s",
+				"Mouse Dir: %s â€¢ Aggro: %s â€¢ %s",
 				gameState.mouseDirectionBucket,
 				gameState.aggressionTier,
 				gameState.interpretedOutcomeBias
@@ -1843,7 +1930,7 @@ local function createGuiForPlayer(player)
 		"ControlHintLabel",
 		UDim2.new(1, -18, 0, 24),
 		UDim2.new(0, 9, 0, 118),
-		"Mouse Dir: Neutral • Aggro: Light",
+		"Mouse Dir: Neutral â€¢ Aggro: Light",
 		false,
 		11
 	)
@@ -1859,10 +1946,10 @@ local function createGuiForPlayer(player)
 	local escapeProgressLabel, escapeProgressPips = createMeterRow(mountPanel, "EscapeProgressLabel", "Escape Progress", 30)
 
 	local roundFeed = createCard(screenGui, "RoundFeed", UDim2.new(0, 360, 0, 60), UDim2.new(0, 14, 1, -74), Color3.fromRGB(13, 18, 26))
-	local playerActionLabel = createStyledLabel(roundFeed, "PlayerActionLabel", UDim2.new(1, -16, 0, 18), UDim2.new(0, 8, 0, 6), "You • -", false, 14)
+	local playerActionLabel = createStyledLabel(roundFeed, "PlayerActionLabel", UDim2.new(1, -16, 0, 18), UDim2.new(0, 8, 0, 6), "You â€¢ -", false, 14)
 	playerActionLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-	local cpuActionLabel = createStyledLabel(roundFeed, "CpuActionLabel", UDim2.new(1, -16, 0, 18), UDim2.new(0, 8, 0, 23), "CPU • -", false, 14)
+	local cpuActionLabel = createStyledLabel(roundFeed, "CpuActionLabel", UDim2.new(1, -16, 0, 18), UDim2.new(0, 8, 0, 23), "CPU â€¢ -", false, 14)
 	cpuActionLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 	local eventLogLabel = createStyledLabel(roundFeed, "EventLogLabel", UDim2.new(1, -16, 0, 20), UDim2.new(0, 8, 0, 40), "Match started.", false, 12)
@@ -2164,6 +2251,7 @@ end
 
 bootstrapLocal()
 bindInputs()
+
 
 
 

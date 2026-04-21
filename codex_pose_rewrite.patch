@@ -1,0 +1,255 @@
+﻿diff --git a/src/main.client.lua b/src/main.client.lua
+index cb7d5f9b51137ee29f5c20a631d8374801ea264d..086f572d440e8aff942e171fcb85537e39281616 100644
+--- a/src/main.client.lua
++++ b/src/main.client.lua
+@@ -1226,108 +1226,199 @@ local function poseClosedGuardTop(fighter, rootPos, controlPressure, postureResi
+ 
+ 	local rightArmCf = torsoCf
+ 		* CFrame.new(1.0, -0.8, -0.6)
+ 		* CFrame.Angles(math.rad(30), 0, math.rad(-30))
+ 
+ 	-- knees wide base
+ 	local leftLegCf = root
+ 		* CFrame.new(-1.2, 0, 0.8)
+ 		* CFrame.Angles(0, 0, math.rad(10))
+ 
+ 	local rightLegCf = root
+ 		* CFrame.new(1.2, 0, 0.8)
+ 		* CFrame.Angles(0, 0, math.rad(-10))
+ 
+ 	setPartCFrame(fighter.torso, torsoCf)
+ 	setPartCFrame(fighter.head, headCf)
+ 	setPartCFrame(fighter.leftArm, leftArmCf)
+ 	setPartCFrame(fighter.rightArm, rightArmCf)
+ 	setPartCFrame(fighter.leftLeg, leftLegCf)
+ 	setPartCFrame(fighter.rightLeg, rightLegCf)
+ 
+ 	placeBelt(fighter)
+ end
+ 
+ local function poseSideControlBottom(fighter, rootPos)
++	-- Side-control bottom root is rolled to keep the fighter on their side.
+ 	local root = CFrame.new(rootPos + Vector3.new(0, 0.15, 0)) * CFrame.Angles(0, 0, math.rad(90))
+-	local torsoCf = root * CFrame.new(0, 1.4, 0)
++	local torsoCf = root
++		* CFrame.new(0, 1.4, 0)
++		* CFrame.Angles(math.rad(8), 0, math.rad(6))
++
++	local headCf = torsoCf
++		* CFrame.new(0, 0.95, -1.15)
++		* CFrame.Angles(math.rad(-10), math.rad(-8), 0)
++
++	local leftArmCf = torsoCf
++		* CFrame.new(-1.45, 0.05, -0.25)
++		* CFrame.Angles(math.rad(-28), math.rad(10), math.rad(72))
++
++	local rightArmCf = torsoCf
++		* CFrame.new(1.35, -0.2, -0.45)
++		* CFrame.Angles(math.rad(10), math.rad(-8), math.rad(82))
++
++	local leftLegCf = torsoCf
++		* CFrame.new(-0.8, -0.95, 1.55)
++		* CFrame.Angles(math.rad(18), math.rad(-10), math.rad(6))
++
++	local rightLegCf = torsoCf
++		* CFrame.new(0.75, -1.0, 1.5)
++		* CFrame.Angles(math.rad(6), math.rad(8), math.rad(-8))
++
+ 	setPartCFrame(fighter.torso, torsoCf)
+-	setPartCFrame(fighter.head, torsoCf * CFrame.new(0, 0.2, -2.35))
+-	setPartCFrame(fighter.leftArm, CFrame.new(rootPos + Vector3.new(-2.0, 1.6, -0.25)) * CFrame.Angles(math.rad(-20), 0, math.rad(90)))
+-	setPartCFrame(fighter.rightArm, CFrame.new(rootPos + Vector3.new(2.0, 1.2, -0.45)) * CFrame.Angles(math.rad(8), 0, math.rad(90)))
+-	setPartCFrame(fighter.leftLeg, CFrame.new(rootPos + Vector3.new(-0.9, 1.2, 2.05)) * CFrame.Angles(math.rad(12), 0, 0))
+-	setPartCFrame(fighter.rightLeg, CFrame.new(rootPos + Vector3.new(0.9, 1.2, 2.05)) * CFrame.Angles(math.rad(-8), 0, 0))
++	setPartCFrame(fighter.head, headCf)
++	setPartCFrame(fighter.leftArm, leftArmCf)
++	setPartCFrame(fighter.rightArm, rightArmCf)
++	setPartCFrame(fighter.leftLeg, leftLegCf)
++	setPartCFrame(fighter.rightLeg, rightLegCf)
+ 	placeBelt(fighter)
+ end
+ 
+ local function poseSideControlTop(fighter, rootPos)
+ 	local root = CFrame.new(rootPos + Vector3.new(0, 0.35, 0.15)) * CFrame.Angles(0, math.rad(90), 0)
+-	setPartCFrame(fighter.torso, root * CFrame.new(0, 2.9, -0.2) * CFrame.Angles(math.rad(12), 0, 0))
+-	setPartCFrame(fighter.head, root * CFrame.new(0, 5.1, -0.7))
+-	setPartCFrame(fighter.leftArm, root * CFrame.new(-1.6, 2.55, 0.65) * CFrame.Angles(math.rad(55), 0, math.rad(8)))
+-	setPartCFrame(fighter.rightArm, root * CFrame.new(1.65, 2.35, 0.2) * CFrame.Angles(math.rad(25), 0, math.rad(-8)))
+-	setPartCFrame(fighter.leftLeg, root * CFrame.new(-0.8, 1.5, 1.7) * CFrame.Angles(math.rad(90), 0, 0))
+-	setPartCFrame(fighter.rightLeg, root * CFrame.new(0.8, 1.5, 1.45) * CFrame.Angles(math.rad(90), 0, 0))
++	local torsoCf = root
++		* CFrame.new(0, 2.9, -0.2)
++		* CFrame.Angles(math.rad(12), 0, math.rad(-4))
++
++	local headCf = torsoCf
++		* CFrame.new(0, 1.45, -0.55)
++		* CFrame.Angles(math.rad(4), math.rad(-6), 0)
++
++	local leftArmCf = torsoCf
++		* CFrame.new(-1.6, -0.3, 0.9)
++		* CFrame.Angles(math.rad(58), math.rad(6), math.rad(12))
++
++	local rightArmCf = torsoCf
++		* CFrame.new(1.55, -0.55, 0.35)
++		* CFrame.Angles(math.rad(28), math.rad(-8), math.rad(-10))
++
++	local leftLegCf = torsoCf
++		* CFrame.new(-0.8, -1.45, 1.95)
++		* CFrame.Angles(math.rad(88), 0, math.rad(4))
++
++	local rightLegCf = torsoCf
++		* CFrame.new(0.8, -1.45, 1.65)
++		* CFrame.Angles(math.rad(88), 0, math.rad(-4))
++
++	setPartCFrame(fighter.torso, torsoCf)
++	setPartCFrame(fighter.head, headCf)
++	setPartCFrame(fighter.leftArm, leftArmCf)
++	setPartCFrame(fighter.rightArm, rightArmCf)
++	setPartCFrame(fighter.leftLeg, leftLegCf)
++	setPartCFrame(fighter.rightLeg, rightLegCf)
+ 	placeBelt(fighter)
+ end
+ 
+ local function poseMountBottom(fighter, rootPos, mountPressure, escapeProgress)
+ 	mountPressure = mountPressure or 0
+ 	escapeProgress = escapeProgress or 0
+ 	local flatten = mountPressure * 0.18
+ 	local turn = escapeProgress * 0.14
+ 	local hipShift = escapeProgress * 0.24
+ 
++	-- Mount bottom root is rolled to keep the torso pinned to the mat plane.
+ 	local root = CFrame.new(rootPos + Vector3.new(0, 0.15, 0)) * CFrame.Angles(0, 0, math.rad(90))
+-	local torsoCf = root * CFrame.new(hipShift, 1.45 - flatten, 0) * CFrame.Angles(math.rad(turn * 24), 0, 0)
+-	local headLift = 0.72 + flatten * 0.18
+-	local headDepth = -1.48 + turn * 0.22
+-	local headPitch = math.rad(-12 + flatten * 10)
+-	local headYaw = math.rad(-22 + turn * 40)
+-	local headRoll = math.rad(-8 + turn * 18)
++	local torsoCf = root
++		* CFrame.new(hipShift, 1.45 - flatten, 0)
++		* CFrame.Angles(math.rad(turn * 24), 0, math.rad(turn * 8))
++
++	local headCf = torsoCf
++		* CFrame.new(-hipShift * 0.08, 0.78 + flatten * 0.1, -1.42 + turn * 0.16)
++		* CFrame.Angles(math.rad(-10 + flatten * 8), math.rad(-20 + turn * 28), math.rad(-8 + turn * 14))
++
++	local leftArmCf = torsoCf
++		* CFrame.new(-1.55 + hipShift * 0.3, -0.1 - flatten * 0.2, -0.05)
++		* CFrame.Angles(math.rad(-6 + turn * 18), math.rad(20), math.rad(88))
++
++	local rightArmCf = torsoCf
++		* CFrame.new(1.55 + hipShift * 0.3, -0.1 - flatten * 0.2, -0.05)
++		* CFrame.Angles(math.rad(6 - turn * 18), math.rad(-20), math.rad(92))
++
++	local leftLegCf = torsoCf
++		* CFrame.new(-0.95 + hipShift * 0.8, -1.15, 1.95)
++		* CFrame.Angles(math.rad(14 + turn * 10), math.rad(-4), math.rad(6))
++
++	local rightLegCf = torsoCf
++		* CFrame.new(0.95 + hipShift * 0.8, -1.15, 1.95)
++		* CFrame.Angles(math.rad(-10 + turn * 10), math.rad(4), math.rad(-6))
+ 
+ 	setPartCFrame(fighter.torso, torsoCf)
+-	setPartCFrame(fighter.head, torsoCf * CFrame.new(-hipShift * 0.08, headLift, headDepth) * CFrame.Angles(headPitch, headYaw, headRoll))
+-	setPartCFrame(fighter.leftArm, CFrame.new(rootPos + Vector3.new(-1.6 + hipShift * 0.5, 1.35 - flatten * 0.25, 0.1)) * CFrame.Angles(math.rad(turn * 18), math.rad(20), math.rad(95)))
+-	setPartCFrame(fighter.rightArm, CFrame.new(rootPos + Vector3.new(1.6 + hipShift * 0.5, 1.35 - flatten * 0.25, 0.1)) * CFrame.Angles(math.rad(-turn * 18), math.rad(-20), math.rad(85)))
+-	setPartCFrame(fighter.leftLeg, CFrame.new(rootPos + Vector3.new(-0.95 + hipShift, 1.2, 2.1)) * CFrame.Angles(math.rad(12 + turn * 12), 0, 0))
+-	setPartCFrame(fighter.rightLeg, CFrame.new(rootPos + Vector3.new(0.95 + hipShift, 1.2, 2.1)) * CFrame.Angles(math.rad(-12 + turn * 12), 0, 0))
++	setPartCFrame(fighter.head, headCf)
++	setPartCFrame(fighter.leftArm, leftArmCf)
++	setPartCFrame(fighter.rightArm, rightArmCf)
++	setPartCFrame(fighter.leftLeg, leftLegCf)
++	setPartCFrame(fighter.rightLeg, rightLegCf)
+ 	placeBelt(fighter)
+ end
+ 
+ local function poseMountTop(fighter, rootPos, mountPressure, escapeProgress)
+ 	mountPressure = mountPressure or 0
+ 	escapeProgress = escapeProgress or 0
+ 	local upright = mountPressure * 0.2
+ 	local destabilized = escapeProgress * 0.12
+ 
+-	setPartCFrame(fighter.torso, CFrame.new(rootPos + Vector3.new(destabilized * 0.7, 4.1 + upright - (destabilized * 0.5), 0.15)) * CFrame.Angles(math.rad(3 - upright * 10 + (destabilized * 16)), 0, 0))
+-	setPartCFrame(fighter.head, CFrame.new(rootPos + Vector3.new(destabilized * 0.55, 6.55 + upright * 0.8 - destabilized * 0.35, 0.05 + upright * 0.3)))
+-	setPartCFrame(fighter.leftArm, CFrame.new(rootPos + Vector3.new(-1.6 + destabilized, 3.55 + upright * 0.35, -0.05)) * CFrame.Angles(math.rad(35 - upright * 8 + destabilized * 18), 0, math.rad(10)))
+-	setPartCFrame(fighter.rightArm, CFrame.new(rootPos + Vector3.new(1.6 + destabilized, 3.55 + upright * 0.35, -0.05)) * CFrame.Angles(math.rad(35 - upright * 8 + destabilized * 18), 0, math.rad(-10)))
+-	setPartCFrame(fighter.leftLeg, CFrame.new(rootPos + Vector3.new(-1.65 + destabilized * 0.9, 1.5, 0.45)) * CFrame.Angles(math.rad(90), 0, math.rad(24 - (escapeProgress * 5))))
+-	setPartCFrame(fighter.rightLeg, CFrame.new(rootPos + Vector3.new(1.65 + destabilized * 0.9, 1.5, 0.45)) * CFrame.Angles(math.rad(90), 0, math.rad(-24 + (escapeProgress * 5))))
++	local root = CFrame.new(rootPos)
++	local torsoCf = root
++		* CFrame.new(destabilized * 0.7, 4.1 + upright - (destabilized * 0.5), 0.15)
++		* CFrame.Angles(math.rad(3 - upright * 10 + (destabilized * 16)), 0, math.rad(destabilized * 6))
++
++	local headCf = torsoCf
++		* CFrame.new(0, 1.45 + upright * 0.35, -0.1 + upright * 0.15)
++		* CFrame.Angles(math.rad(2 - upright * 4), math.rad(destabilized * 8), 0)
++
++	local leftArmCf = torsoCf
++		* CFrame.new(-1.6 + destabilized * 0.35, -0.55 + upright * 0.25, -0.2)
++		* CFrame.Angles(math.rad(35 - upright * 8 + destabilized * 18), 0, math.rad(12))
++
++	local rightArmCf = torsoCf
++		* CFrame.new(1.6 + destabilized * 0.35, -0.55 + upright * 0.25, -0.2)
++		* CFrame.Angles(math.rad(35 - upright * 8 + destabilized * 18), 0, math.rad(-12))
++
++	local leftLegCf = torsoCf
++		* CFrame.new(-1.65 + destabilized * 0.45, -2.6, 0.3)
++		* CFrame.Angles(math.rad(90), 0, math.rad(24 - (escapeProgress * 5)))
++
++	local rightLegCf = torsoCf
++		* CFrame.new(1.65 + destabilized * 0.45, -2.6, 0.3)
++		* CFrame.Angles(math.rad(90), 0, math.rad(-24 + (escapeProgress * 5)))
++
++	setPartCFrame(fighter.torso, torsoCf)
++	setPartCFrame(fighter.head, headCf)
++	setPartCFrame(fighter.leftArm, leftArmCf)
++	setPartCFrame(fighter.rightArm, rightArmCf)
++	setPartCFrame(fighter.leftLeg, leftLegCf)
++	setPartCFrame(fighter.rightLeg, rightLegCf)
+ 	placeBelt(fighter)
+ end
+ 
+ local function applyTopBottomPose(positionName, topFighter, bottomFighter)
+ 	if positionName == "Closed Guard" then
+ 		local pressureScore = gameState.triangleThreat - gameState.postureLevel
+ 		local controlPressure = math.clamp((pressureScore + 1) / 3, 0, 1)
+ 		local postureResistance = gameState.postureLevel / 2
+ 		local postureState = math.clamp(gameState.postureLevel, 0, 2)
+ 		local expressionProfile = getClosedGuardBottomExpressionProfile()
+ 		poseClosedGuardBottom(bottomFighter, Vector3.new(-0.05, 0.30, -0.10), controlPressure, postureResistance, expressionProfile)
+ 		poseClosedGuardTop(topFighter, Vector3.new(0.05, 0.92, 0.42), postureState, controlPressure)
+ 	elseif positionName == "Side Control" then
+ 		poseSideControlBottom(bottomFighter, Vector3.new(0, 0.6, 0))
+ 		poseSideControlTop(topFighter, Vector3.new(0, 0.6, 0))
+ 	elseif positionName == "Mount" then
+ 		poseMountBottom(bottomFighter, Vector3.new(0, 0.6, 0), gameState.mountPressure, gameState.escapeProgress)
+ 		poseMountTop(topFighter, Vector3.new(0, 0.6, 0), gameState.mountPressure, gameState.escapeProgress)
+ 	end
+ end
+ 
+ local function applyPositionPose(positionName, playerRole, cpuRole)
+ 	if positionName == "Standing" then
+ 		poseStanding(playerFighter, Vector3.new(-3, 0, 0), 90)
+ 		poseStanding(cpuFighter, Vector3.new(3, 0, 0), -90)
+@@ -2147,26 +2238,25 @@ local function bindInputs()
+ 			if gas > 0 and mag > 0 then
+ 				gameState.actionPressure = math.min(1.5, gameState.actionPressure + (mag / 30) * gas)
+ 			else
+ 				gameState.actionPressure = math.max(0, gameState.actionPressure - 0.05)
+ 			end
+ 
+ 			if gameState.position == "Mount" and gameState.playerRole == "Bottom" then
+ 				decayMountInputPressure(dt)
+ 				buildMountInputPressureFromDelta(derivedDelta)
+ 				tryMountPressureResolution()
+ 			end
+ 
+ 			runInterpretedExchange()
+ 			render()
+ 		end
+ 	end)
+ end
+ 
+ bootstrapLocal()
+ bindInputs()
+

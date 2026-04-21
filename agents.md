@@ -1,19 +1,39 @@
-## Pose sanity rules
+# AGENTS.md
 
-Follow `docs/human_pose_constraints.md`.
+## Repo basics
+- (your existing notes: rojo, structure, etc.)
 
-Non-negotiable rules:
-- torso is the main body anchor
+---
+
+## Coding principles
+- keep functions readable over clever
+- avoid hidden coupling
+- prefer explicit transforms
+
+---
+
+## Pose system rules
+
+Follow:
+- /docs/human_pose_constraints.md
+- /docs/pose_system_contract.md
+- /docs/pose_library_contract.md
+- /docs/pose_family_inventory.md
+
+Non-negotiable:
+- torso is the main anchor
 - head must remain torso-relative
-- do not translate heads independently in world space
-- gameplay variables may perturb a baseline pose, not define the body from scratch
-- top/bottom relationship must read without relying on HUD labels
-- if head/torso/hips are not readable, the pose is not done
+- no independent world-space head placement
+- no mixed reference frames in a single pose
+- gameplay variables are modifiers only
 
 When editing poses:
-1. fix attachment sanity
-2. fix silhouette/readability
-3. fix position truth
-4. only then add dynamic variation
+1. baseline pose first
+2. ensure readability (top/bottom, head, torso)
+3. then apply light modifiers
+4. do not compensate for broken poses with offsets
 
-Prefer clean baseline pose functions over layered offset hacks.
+Definition of done:
+- pose reads correctly without HUD
+- both fighters are anatomically coherent
+- code follows pose_system_contract.md
