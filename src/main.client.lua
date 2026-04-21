@@ -1,4 +1,4 @@
-﻿--420 942
+﻿--420 1015
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 
@@ -1282,6 +1282,7 @@ local function poseSideControlBottom(fighter, rootPos)
 	setPartCFrame(fighter.rightLeg, rightLegCf)
 	placeBelt(fighter)
 end
+
 local function poseSideControlTop(fighter, rootPos)
 	local root = CFrame.new(rootPos + Vector3.new(0, 0.35, 0.15)) * CFrame.Angles(0, math.rad(90), 0)
 	local torsoCf = root
@@ -1316,6 +1317,7 @@ local function poseSideControlTop(fighter, rootPos)
 	setPartCFrame(fighter.rightLeg, rightLegCf)
 	placeBelt(fighter)
 end
+
 local function poseMountBottom(fighter, rootPos, mountPressure, escapeProgress)
 	mountPressure = mountPressure or 0
 	escapeProgress = escapeProgress or 0
@@ -1357,6 +1359,7 @@ local function poseMountBottom(fighter, rootPos, mountPressure, escapeProgress)
 	setPartCFrame(fighter.rightLeg, rightLegCf)
 	placeBelt(fighter)
 end
+
 local function poseMountTop(fighter, rootPos, mountPressure, escapeProgress)
 	mountPressure = mountPressure or 0
 	escapeProgress = escapeProgress or 0
@@ -1396,6 +1399,7 @@ local function poseMountTop(fighter, rootPos, mountPressure, escapeProgress)
 	setPartCFrame(fighter.rightLeg, rightLegCf)
 	placeBelt(fighter)
 end
+
 local function applyTopBottomPose(positionName, topFighter, bottomFighter)
 	if positionName == "Closed Guard" then
 		local pressureScore = gameState.triangleThreat - gameState.postureLevel
@@ -2251,6 +2255,7 @@ end
 
 bootstrapLocal()
 bindInputs()
+
 
 
 

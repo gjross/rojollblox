@@ -1,6 +1,27 @@
 $path = "src/main.client.lua"
 $text = Get-Content $path -Raw
 
+function Replace-FunctionBlock {
+	param(
+		[string]$Source,
+		[string]$StartMarker,
+		[string]$NextMarker,
+		[string]$Replacement
+	)
+
+	$start = $Source.IndexOf($StartMarker)
+	if ($start -lt 0) {
+		throw "Start marker not found: $StartMarker"
+	}
+
+	$next = $Source.IndexOf($NextMarker, $start)
+	if ($next -lt 0) {
+		throw "Next marker not found after $StartMarker : $NextMarker"
+	}
+
+	return $Source.Substring(0, $start) + $Replacement.TrimEnd() + "`r`n`r`n" + $Source.Substring($next)
+}
+
 $newPoseSideControlBottom = @'
 local function poseSideControlBottom(fighter, rootPos)
 	-- Side-control bottom root is rolled to keep the fighter on their side.
@@ -162,33 +183,34 @@ local function poseMountTop(fighter, rootPos, mountPressure, escapeProgress)
 end
 '@
 
-$replacements = @(
-	@{
-		Pattern = '(?s)local function poseSideControlBottom\(fighter, rootPos\).*?(?=\r?\nlocal function poseSideControlTop\(fighter, rootPos\))'
-		Replacement = $newPoseSideControlBottom.TrimEnd()
-	},
-	@{
-		Pattern = '(?s)local function poseSideControlTop\(fighter, rootPos\).*?(?=\r?\nlocal function poseMountBottom\(fighter, rootPos, mountPressure, escapeProgress\))'
-		Replacement = $newPoseSideControlTop.TrimEnd()
-	},
-	@{
-		Pattern = '(?s)local function poseMountBottom\(fighter, rootPos, mountPressure, escapeProgress\).*?(?=\r?\nlocal function poseMountTop\(fighter, rootPos, mountPressure, escapeProgress\))'
-		Replacement = $newPoseMountBottom.TrimEnd()
-	},
-	@{
-		Pattern = '(?s)local function poseMountTop\(fighter, rootPos, mountPressure, escapeProgress\).*?(?=\r?\nlocal function applyTopBottomPose\(positionName, topFighter, bottomFighter\))'
-		Replacement = $newPoseMountTop.TrimEnd()
-	}
-)
+try {
+	$text = Replace-FunctionBlock `
+		-Source $text `
+		-StartMarker "local function poseSideControlBottom(fighter, rootPos)" `
+		-NextMarker "local function poseSideControlTop(fighter, rootPos)" `
+		-Replacement $newPoseSideControlBottom
 
-foreach ($item in $replacements) {
-	$newText = [regex]::Replace($text, $item.Pattern, $item.Replacement)
-	if ($newText -eq $text) {
-		Write-Host "FAILED: pattern not found:"
-		Write-Host $item.Pattern
-		exit 1
-	}
-	$text = $newText
+	$text = Replace-FunctionBlock `
+		-Source $text `
+		-StartMarker "local function poseSideControlTop(fighter, rootPos)" `
+		-NextMarker "local function poseMountBottom(fighter, rootPos, mountPressure, escapeProgress)" `
+		-Replacement $newPoseSideControlTop
+
+	$text = Replace-FunctionBlock `
+		-Source $text `
+		-StartMarker "local function poseMountBottom(fighter, rootPos, mountPressure, escapeProgress)" `
+		-NextMarker "local function poseMountTop(fighter, rootPos, mountPressure, escapeProgress)" `
+		-Replacement $newPoseMountBottom
+
+	$text = Replace-FunctionBlock `
+		-Source $text `
+		-StartMarker "local function poseMountTop(fighter, rootPos, mountPressure, escapeProgress)" `
+		-NextMarker "local function applyTopBottomPose(positionName, topFighter, bottomFighter)" `
+		-Replacement $newPoseMountTop
+}
+catch {
+	Write-Host $_.Exception.Message
+	exit 1
 }
 
 Set-Content -Path $path -Value $text -Encoding UTF8
