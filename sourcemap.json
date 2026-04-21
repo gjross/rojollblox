@@ -1,0 +1,1 @@
+{"name":"rollblox","className":"DataModel","filePaths":["default.project.json"],"children":[{"name":"StarterPlayer","className":"StarterPlayer","children":[{"name":"StarterPlayerScripts","className":"StarterPlayerScripts","children":[{"name":"main","className":"LocalScript","filePaths":["src/main.client.lua"]}]}]}]}

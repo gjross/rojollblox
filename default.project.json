@@ -3,10 +3,10 @@
   "tree": {
     "$className": "DataModel",
     "StarterPlayer": {
+      "$className": "StarterPlayer",
       "StarterPlayerScripts": {
-        "main": {
-          "$path": "src/main.client.lua"
-        }
+        "$className": "StarterPlayerScripts",
+        "$path": "src/StarterPlayerScripts"
       }
     }
   }
