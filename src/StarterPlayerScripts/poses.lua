@@ -259,8 +259,8 @@ end
 local function applyTopBottomPose(gameState, topFighter, bottomFighter)
 	if gameState.position == "Closed Guard" then
 		local _profile = getClosedGuardBottomExpressionProfile(gameState)
-		poseClosedGuardBottom(bottomFighter, Vector3.new(-0.05, 0.30, -0.10))
-		poseClosedGuardTop(topFighter, Vector3.new(0.05, 0.92, 0.42))
+		poseClosedGuardBottom(bottomFighter, Vector3.new(-0.1, 0.2, -0.3))
+		poseClosedGuardTop(topFighter, Vector3.new(0.1, 1.2, 0.8))
 	elseif gameState.position == "Side Control" then
 		poseSideControlBottom(bottomFighter, Vector3.new(0, 0.6, 0)); poseSideControlTop(topFighter, Vector3.new(0, 0.6, 0))
 	elseif gameState.position == "Mount" then
