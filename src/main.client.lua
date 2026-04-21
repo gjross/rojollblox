@@ -1,3 +1,4 @@
+--420 859
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 
@@ -1167,113 +1168,90 @@ local function getClosedGuardBottomExpressionProfile()
 end
 
 local function poseClosedGuardBottom(fighter, rootPos, controlPressure, postureResistance, expressionProfile)
-	controlPressure = controlPressure or 0
-	postureResistance = postureResistance or 0
-	expressionProfile = expressionProfile or getClosedGuardBottomExpressionProfile()
+	local root = CFrame.new(rootPos) * CFrame.Angles(math.rad(90), 0, 0)
 
-	local aggressionScale = expressionProfile.aggressionScale
-	local pulse = (math.sin(tick() * 6.5) * 0.5 + 0.5) * aggressionScale
+	-- torso: slightly angled, not flat
+	local torsoCf = root
+		* CFrame.new(0, 1.0, -0.5)
+		* CFrame.Angles(math.rad(-20), 0, 0)
 
-	local legTightness = math.clamp(controlPressure * (1 - postureResistance * 0.45), -0.2, 1)
-	local hipLift = legTightness * 0.26
-	local shoulderCrunch = legTightness * 0.24
+	-- head: always visible, attached, forward of chest
+	local headCf = torsoCf
+		* CFrame.new(0, 1.1, -0.8)
 
-	local legSpread = 0.92 - (legTightness * 0.18)
-	local legForward = 1.92 - (legTightness * 0.10)
-	local legPitch = -96 - (legTightness * 10)
-	local legYaw = 24 + (legTightness * 10)
-	local kneeHeight = 2.55 + (legTightness * 0.28)
+	-- arms: neutral framing
+	local leftArmCf = torsoCf
+		* CFrame.new(-1.3, 0.3, 0)
+		* CFrame.Angles(0, 0, math.rad(70))
 
-	local expressionBoost = 1 + aggressionScale * 0.2
-	local leftArmForward = (expressionProfile.leftArmForward or 0) * expressionBoost
-	local rightArmForward = (expressionProfile.rightArmForward or 0) * expressionBoost
-	local leftArmOut = (expressionProfile.leftArmOut or 0) * expressionBoost
-	local rightArmOut = (expressionProfile.rightArmOut or 0) * expressionBoost
-	local leftHipShift = (expressionProfile.leftHipShift or 0) * expressionBoost
-	local rightHipShift = (expressionProfile.rightHipShift or 0) * expressionBoost
-	local leftKneeOpen = (expressionProfile.leftKneeOpen or 0) * expressionBoost
-	local rightKneeOpen = (expressionProfile.rightKneeOpen or 0) * expressionBoost
+	local rightArmCf = torsoCf
+		* CFrame.new(1.3, 0.3, 0)
+		* CFrame.Angles(0, 0, math.rad(-70))
 
-	local sideOffset = expressionProfile.sideOffset * (0.65 + aggressionScale * 0.45)
-	local crunchBias = expressionProfile.crunchBias * (0.6 + aggressionScale * 0.7)
-	local extendBias = expressionProfile.extendBias * (0.6 + aggressionScale * 0.7)
-	local tensionPulse = pulse * 0.08
+	-- legs: wrapped (closed guard)
+	local leftLegCf = root
+		* CFrame.new(-0.8, 0.6, 1.6)
+		* CFrame.Angles(math.rad(25), 0, math.rad(25))
 
-	local yawAngle = 88 + expressionProfile.yawOffset * (0.7 + aggressionScale * 0.45)
-	local torsoX = sideOffset
-	local torsoY = 1.15 + hipLift - extendBias * 0.05 + crunchBias * 0.05
-	local torsoZ = -0.42 + shoulderCrunch - crunchBias * 0.28 + extendBias * 0.2 + tensionPulse
-	local torsoPitch = -24 + crunchBias * 12 - extendBias * 10
+	local rightLegCf = root
+		* CFrame.new(0.8, 0.6, 1.6)
+		* CFrame.Angles(math.rad(25), 0, math.rad(-25))
 
-	local headX = sideOffset * 0.85
-	local headY = 1.32 + hipLift * 0.45 + crunchBias * 0.10 - extendBias * 0.06
-	local headZ = -2.85 + shoulderCrunch * 0.45 - crunchBias * 0.34 + extendBias * 0.26
+	setPartCFrame(fighter.torso, torsoCf)
+	setPartCFrame(fighter.head, headCf)
+	setPartCFrame(fighter.leftArm, leftArmCf)
+	setPartCFrame(fighter.rightArm, rightArmCf)
+	setPartCFrame(fighter.leftLeg, leftLegCf)
+	setPartCFrame(fighter.rightLeg, rightLegCf)
 
-	local leftArmX = -1.72 + leftArmOut
-	local rightArmX = 1.72 + rightArmOut
-	local leftArmY = 1.05 + hipLift + crunchBias * 0.08
-	local rightArmY = 1.05 + hipLift + crunchBias * 0.08
-	local leftArmZ = -0.95 + shoulderCrunch + leftArmForward - extendBias * 0.2
-	local rightArmZ = -0.95 + shoulderCrunch + rightArmForward - extendBias * 0.2
-	local leftArmPitch = -18 + legTightness * 4 + leftArmForward * 24 + crunchBias * 6 - extendBias * 4
-	local rightArmPitch = -18 + legTightness * 4 + rightArmForward * 24 + crunchBias * 6 - extendBias * 4
-
-	local clampEffect = crunchBias * 0.25 - extendBias * 0.22
-	local baseSpread = legSpread - clampEffect * 0.32
-	local baseForward = legForward - clampEffect * 0.2 + extendBias * 0.08
-	local baseKneeHeight = kneeHeight + clampEffect * 0.2
-	local baseLegPitch = legPitch - clampEffect * 10 + extendBias * 8
-	local baseLegYaw = legYaw + clampEffect * 7
-
-	local leftLegSpread = baseSpread + leftKneeOpen * 0.40
-	local rightLegSpread = baseSpread + rightKneeOpen * 0.40
-	local leftLegForward = baseForward + leftKneeOpen * 0.10 + leftHipShift * 0.14
-	local rightLegForward = baseForward + rightKneeOpen * 0.10 + rightHipShift * 0.14
-	local leftKneeHeight = baseKneeHeight + leftKneeOpen * 0.1
-	local rightKneeHeight = baseKneeHeight + rightKneeOpen * 0.1
-	local leftLegPitch = baseLegPitch + leftKneeOpen * 3
-	local rightLegPitch = baseLegPitch + rightKneeOpen * 3
-	local leftLegYaw = 42 + leftHipShift * 18 + leftKneeOpen * 6
-	local rightLegYaw = 42 - rightHipShift * 18 + rightKneeOpen * 6
-
-	local root = CFrame.new(rootPos) * CFrame.Angles(0, 0, math.rad(yawAngle))
-	setPartCFrame(fighter.torso, root * CFrame.new(torsoX, torsoY, torsoZ) * CFrame.Angles(math.rad(torsoPitch), 0, 0))
-	setPartCFrame(fighter.head, CFrame.new(rootPos + Vector3.new(headX, headY, headZ)))
-	setPartCFrame(fighter.leftArm, CFrame.new(rootPos + Vector3.new(leftArmX + sideOffset * 0.22, leftArmY, leftArmZ)) * CFrame.Angles(math.rad(leftArmPitch), 0, math.rad(92 + leftArmOut * 20)))
-	setPartCFrame(fighter.rightArm, CFrame.new(rootPos + Vector3.new(rightArmX + sideOffset * 0.22, rightArmY, rightArmZ)) * CFrame.Angles(math.rad(rightArmPitch), 0, math.rad(88 + rightArmOut * 20)))
-	setPartCFrame(fighter.leftLeg, CFrame.new(rootPos + Vector3.new(-leftLegSpread + sideOffset * 0.22 + leftHipShift * 0.16, leftKneeHeight, leftLegForward)) * CFrame.Angles(math.rad(leftLegPitch), math.rad(-leftLegYaw), math.rad(-18)))
-	setPartCFrame(fighter.rightLeg, CFrame.new(rootPos + Vector3.new(rightLegSpread + sideOffset * 0.22 + rightHipShift * 0.16, rightKneeHeight, rightLegForward)) * CFrame.Angles(math.rad(rightLegPitch), math.rad(rightLegYaw), math.rad(18)))
 	placeBelt(fighter)
 end
 
-local function poseClosedGuardTop(fighter, rootPos, postureState, pressureOffset)
-	postureState = postureState or 1
-	pressureOffset = pressureOffset or 0
-	postureState = math.clamp(postureState, 0, 2)
+local function poseClosedGuardTop(fighter, rootPos, controlPressure, postureResistance, expressionProfile)
+	local root = CFrame.new(rootPos)
 
-	local postureProfiles = {
-		[0] = {torsoY = 3.00, torsoZ = -0.18, torsoPitch = 38, headY = 5.25, headZ = -1.10, armY = 2.40, armZ = -0.30, armPitch = 102, kneeY = 1.35, kneeZ = 1.40},
-		[1] = {torsoY = 3.18, torsoZ = 0.02, torsoPitch = 24, headY = 5.55, headZ = -0.52, armY = 2.55, armZ = 0.00, armPitch = 84, kneeY = 1.40, kneeZ = 1.52},
-		[2] = {torsoY = 3.40, torsoZ = 0.24, torsoPitch = 10, headY = 5.95, headZ = 0.10, armY = 2.80, armZ = 0.34, armPitch = 62, kneeY = 1.48, kneeZ = 1.66}
-	}
-	local profile = postureProfiles[postureState]
+	-- hips centered over opponent
+	local torsoCf = root
+		* CFrame.new(0, 2.2, 0)
+		* CFrame.Angles(math.rad(-10), 0, 0)
 
-	local forwardDrag = pressureOffset * 0.12
-	local crunchAngle = pressureOffset * 4
+	-- head: upright, dominant, readable
+	local headCf = torsoCf
+		* CFrame.new(0, 1.4, 0)
 
-	setPartCFrame(fighter.torso, CFrame.new(rootPos + Vector3.new(0, profile.torsoY, profile.torsoZ - forwardDrag)) * CFrame.Angles(math.rad(profile.torsoPitch + crunchAngle), 0, 0))
-	setPartCFrame(fighter.head, CFrame.new(rootPos + Vector3.new(0, profile.headY, profile.headZ - forwardDrag * 1.3)))
-	setPartCFrame(fighter.leftArm, CFrame.new(rootPos + Vector3.new(-1.55, profile.armY, profile.armZ - forwardDrag * 0.8)) * CFrame.Angles(math.rad(profile.armPitch + crunchAngle * 0.5), 0, math.rad(12)))
-	setPartCFrame(fighter.rightArm, CFrame.new(rootPos + Vector3.new(1.55, profile.armY, profile.armZ - forwardDrag * 0.8)) * CFrame.Angles(math.rad(profile.armPitch + crunchAngle * 0.5), 0, math.rad(-12)))
-	setPartCFrame(fighter.leftLeg, CFrame.new(rootPos + Vector3.new(-0.88, profile.kneeY, profile.kneeZ - forwardDrag * 0.5)) * CFrame.Angles(math.rad(90), 0, 0))
-	setPartCFrame(fighter.rightLeg, CFrame.new(rootPos + Vector3.new(0.88, profile.kneeY, profile.kneeZ - forwardDrag * 0.5)) * CFrame.Angles(math.rad(90), 0, 0))
+	-- arms: framing on opponent torso (not blocking camera)
+	local leftArmCf = torsoCf
+		* CFrame.new(-1.0, -0.8, -0.6)
+		* CFrame.Angles(math.rad(30), 0, math.rad(30))
+
+	local rightArmCf = torsoCf
+		* CFrame.new(1.0, -0.8, -0.6)
+		* CFrame.Angles(math.rad(30), 0, math.rad(-30))
+
+	-- knees wide base
+	local leftLegCf = root
+		* CFrame.new(-1.2, 0, 0.8)
+		* CFrame.Angles(0, 0, math.rad(10))
+
+	local rightLegCf = root
+		* CFrame.new(1.2, 0, 0.8)
+		* CFrame.Angles(0, 0, math.rad(-10))
+
+	setPartCFrame(fighter.torso, torsoCf)
+	setPartCFrame(fighter.head, headCf)
+	setPartCFrame(fighter.leftArm, leftArmCf)
+	setPartCFrame(fighter.rightArm, rightArmCf)
+	setPartCFrame(fighter.leftLeg, leftLegCf)
+	setPartCFrame(fighter.rightLeg, rightLegCf)
+
 	placeBelt(fighter)
 end
 
 local function poseSideControlBottom(fighter, rootPos)
 	local root = CFrame.new(rootPos + Vector3.new(0, 0.15, 0)) * CFrame.Angles(0, 0, math.rad(90))
-	setPartCFrame(fighter.torso, root * CFrame.new(0, 1.4, 0))
-	setPartCFrame(fighter.head, CFrame.new(rootPos + Vector3.new(0, 1.6, -2.35)))
+	local torsoCf = root * CFrame.new(0, 1.4, 0)
+	setPartCFrame(fighter.torso, torsoCf)
+	setPartCFrame(fighter.head, torsoCf * CFrame.new(0, 0.2, -2.35))
 	setPartCFrame(fighter.leftArm, CFrame.new(rootPos + Vector3.new(-2.0, 1.6, -0.25)) * CFrame.Angles(math.rad(-20), 0, math.rad(90)))
 	setPartCFrame(fighter.rightArm, CFrame.new(rootPos + Vector3.new(2.0, 1.2, -0.45)) * CFrame.Angles(math.rad(8), 0, math.rad(90)))
 	setPartCFrame(fighter.leftLeg, CFrame.new(rootPos + Vector3.new(-0.9, 1.2, 2.05)) * CFrame.Angles(math.rad(12), 0, 0))
@@ -1300,8 +1278,15 @@ local function poseMountBottom(fighter, rootPos, mountPressure, escapeProgress)
 	local hipShift = escapeProgress * 0.24
 
 	local root = CFrame.new(rootPos + Vector3.new(0, 0.15, 0)) * CFrame.Angles(0, 0, math.rad(90))
-	setPartCFrame(fighter.torso, root * CFrame.new(hipShift, 1.45 - flatten, 0) * CFrame.Angles(math.rad(turn * 24), 0, 0))
-	setPartCFrame(fighter.head, CFrame.new(rootPos + Vector3.new(hipShift * 0.7, 1.65 - flatten * 0.55, -2.35 + turn * 0.6)))
+	local torsoCf = root * CFrame.new(hipShift, 1.45 - flatten, 0) * CFrame.Angles(math.rad(turn * 24), 0, 0)
+	local headLift = 0.72 + flatten * 0.18
+	local headDepth = -1.48 + turn * 0.22
+	local headPitch = math.rad(-12 + flatten * 10)
+	local headYaw = math.rad(-22 + turn * 40)
+	local headRoll = math.rad(-8 + turn * 18)
+
+	setPartCFrame(fighter.torso, torsoCf)
+	setPartCFrame(fighter.head, torsoCf * CFrame.new(-hipShift * 0.08, headLift, headDepth) * CFrame.Angles(headPitch, headYaw, headRoll))
 	setPartCFrame(fighter.leftArm, CFrame.new(rootPos + Vector3.new(-1.6 + hipShift * 0.5, 1.35 - flatten * 0.25, 0.1)) * CFrame.Angles(math.rad(turn * 18), math.rad(20), math.rad(95)))
 	setPartCFrame(fighter.rightArm, CFrame.new(rootPos + Vector3.new(1.6 + hipShift * 0.5, 1.35 - flatten * 0.25, 0.1)) * CFrame.Angles(math.rad(-turn * 18), math.rad(-20), math.rad(85)))
 	setPartCFrame(fighter.leftLeg, CFrame.new(rootPos + Vector3.new(-0.95 + hipShift, 1.2, 2.1)) * CFrame.Angles(math.rad(12 + turn * 12), 0, 0))
@@ -1374,7 +1359,7 @@ local function applyReactionOffsets(fighter, reaction)
 end
 
 
-local function styleFighterByRole(fighter, role)
+local function styleFighterByRole(fighter, role, isPlayer)
 	local targetColor = ROLE_COLORS[role] or ROLE_COLORS.Neutral
 	local pulse = role == "Top" and gameState.visualPulse.top or gameState.visualPulse.bottom
 	local roleMix = 0.2 + (pulse * 0.05)
@@ -1398,6 +1383,7 @@ local function styleFighterByRole(fighter, role)
 
 	local roleBillboard = fighter.head:FindFirstChild("RoleBillboard")
 	if roleBillboard and roleBillboard:FindFirstChild("RoleText") then
+		local identityText = isPlayer and "YOU" or "CPU"
 		local roleText = roleBillboard.RoleText
 		if role == "Top" then
 			roleBillboard.StudsOffset = Vector3.new(0.45, 2.85, 0)
@@ -1406,9 +1392,12 @@ local function styleFighterByRole(fighter, role)
 		else
 			roleBillboard.StudsOffset = Vector3.new(0, 2.2, 0)
 		end
-		roleText.Text = string.upper(role)
-		roleText.BackgroundColor3 = fighter.baseColor:Lerp(targetColor, 0.55)
+		roleText.Text = string.upper(identityText .. " • " .. role)
+		roleText.BackgroundColor3 = isPlayer and Color3.fromRGB(40, 115, 235) or fighter.baseColor:Lerp(targetColor, 0.55)
 		roleText.TextColor3 = Color3.fromRGB(235, 238, 245)
+		roleText.TextStrokeTransparency = isPlayer and 0.15 or 0.55
+		roleText.TextStrokeColor3 = Color3.fromRGB(10, 14, 22)
+		roleText.BackgroundTransparency = isPlayer and 0.05 or 0.2
 	end
 end
 
@@ -1710,8 +1699,8 @@ render = function()
 		end
 	end
 
-	styleFighterByRole(playerFighter, gameState.playerRole)
-	styleFighterByRole(cpuFighter, gameState.cpuRole)
+	styleFighterByRole(playerFighter, gameState.playerRole, true)
+	styleFighterByRole(cpuFighter, gameState.cpuRole, false)
 
 	applyPositionPose(gameState.position, gameState.playerRole, gameState.cpuRole)
 	applyReactionOffsets(playerFighter, gameState.playerReaction)
@@ -2175,4 +2164,9 @@ end
 
 bootstrapLocal()
 bindInputs()
+
+
+
+
+
 
