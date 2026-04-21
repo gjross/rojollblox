@@ -1,5 +1,7 @@
 local Poses = {}
 
+--utf8
+
 local CHARACTER_HIDE_TRANSPARENCY = 1
 
 local ROLE_COLORS = {
@@ -259,8 +261,8 @@ end
 local function applyTopBottomPose(gameState, topFighter, bottomFighter)
 	if gameState.position == "Closed Guard" then
 		local _profile = getClosedGuardBottomExpressionProfile(gameState)
-		poseClosedGuardBottom(bottomFighter, Vector3.new(-0.1, 0.2, -0.2))
-		poseClosedGuardTop(topFighter, Vector3.new(0.1, 1.35, 1.2))
+		poseClosedGuardBottom(bottomFighter, Vector3.new(-0.1, 0.95, -0.2))
+		poseClosedGuardTop(topFighter, Vector3.new(0.1, 2.05, 1.2))
 	elseif gameState.position == "Side Control" then
 		poseSideControlBottom(bottomFighter, Vector3.new(0, 0.6, 0)); poseSideControlTop(topFighter, Vector3.new(0, 0.6, 0))
 	elseif gameState.position == "Mount" then
